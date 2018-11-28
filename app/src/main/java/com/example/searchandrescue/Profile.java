@@ -92,15 +92,15 @@ public class Profile extends Fragment {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mNameTask.setText(getString(R.string.full_name) + " " + dataSnapshot.child("volunter").child(idUser).child("full_name").getValue(String.class));
-                mTelephone.setText(getString(R.string.tel) + " " + dataSnapshot.child("volunter").child(idUser).child("telephone").getValue(String.class));
-                mSex.setText(getString(R.string.sex) + " " + dataSnapshot.child("volunter").child(idUser).child("coordinate").getValue(String.class));
+                mNameTask.setText("ФИО: " + dataSnapshot.child("volunter").child(idUser).child("full_name").getValue(String.class));
+                mTelephone.setText("Телефон: " + dataSnapshot.child("volunter").child(idUser).child("telephone").getValue(String.class));
+                mSex.setText("Пол: " + dataSnapshot.child("volunter").child(idUser).child("coordinate").getValue(String.class));
                 mCarTupe.setText(dataSnapshot.child("volunter").child(idUser).child("car_type").getValue(String.class));
                 mCarName.setText(dataSnapshot.child("volunter").child(idUser).child("car_name").getValue(String.class));
                 mCarSign.setText(dataSnapshot.child("volunter").child(idUser).child("car_sign_in").getValue(String.class));
                 mCarSeats.setText(dataSnapshot.child("volunter").child(idUser).child("car_seats").getValue(String.class));
-                mEquip.setText(getString(R.string.equipment) + ": " + dataSnapshot.child("volunter").child(idUser).child("equipment").getValue(String.class));
-                mAge.setText(getString(R.string.age) + " " + dataSnapshot.child("volunter").child(idUser).child("age").getValue(String.class));
+                mEquip.setText("Снаряжение: " + dataSnapshot.child("volunter").child(idUser).child("equipment").getValue(String.class));
+                mAge.setText("Возраст: " + dataSnapshot.child("volunter").child(idUser).child("age").getValue(String.class));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

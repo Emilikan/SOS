@@ -4,32 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:background="@drawable/bg_default"
     tools:context=".Blog">
 
     <!-- TODO: Update blank fragment layout -->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="67dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/button3"
                 android:layout_width="match_parent"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_default"
                 android:text="Добавить задачу" />
+
             <Button
                 android:id="@+id/back3"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_default"
                 android:text="Назад" />
-
-            <ListView
-                android:id="@+id/discr_for_task_my"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </ListView>
-
         </LinearLayout>
+
+        <ListView
+            android:id="@+id/discr_for_task_my"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </ListView>
+
+    </LinearLayout>
 </FrameLayout>

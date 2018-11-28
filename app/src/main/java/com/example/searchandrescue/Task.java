@@ -152,12 +152,12 @@ public class Task extends Fragment {
                     //Toast.makeText(getActivity(), dbCounter, Toast.LENGTH_SHORT).show();
                     mNameTask.setText(dataSnapshot.child("tasks").child(conterOfFragment).child("nameOfTask").getValue(String.class));
                     mDescrbingOfTask.setText(dataSnapshot.child("tasks").child(conterOfFragment).child("describing").getValue(String.class));
-                    mCoordiinate1.setText(getString(R.string.coor_1) + ": " +dataSnapshot.child("tasks").child(conterOfFragment).child("Coordinate1").getValue(String.class));
-                    mCoordinate2.setText(getString(R.string.coor_2) + ": " + dataSnapshot.child("tasks").child(conterOfFragment).child("Coordinate2").getValue(String.class));
-                    mEquipment.setText(getString(R.string.equipment) + ": " + dataSnapshot.child("tasks").child(conterOfFragment).child("Equipment").getValue(String.class));
-                    mNaturalConditions.setText(getString(R.string.task_weather) + ": " + dataSnapshot.child("tasks").child(conterOfFragment).child("NaturalConditions").getValue(String.class));
-                    mTime.setText(getString(R.string.task_time) + ": " + dataSnapshot.child("tasks").child(conterOfFragment).child("time").getValue(String.class));
-                    mDate.setText(getString(R.string.task_date_start) + ": " + dataSnapshot.child("tasks").child(conterOfFragment).child("Date").getValue(String.class));
+                    mCoordiinate1.setText("Координата 1: " +dataSnapshot.child("tasks").child(conterOfFragment).child("Coordinate1").getValue(String.class));
+                    mCoordinate2.setText("Координата 2: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Coordinate2").getValue(String.class));
+                    mEquipment.setText("Снаряжение: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Equipment").getValue(String.class));
+                    mNaturalConditions.setText("Природные условия: " + dataSnapshot.child("tasks").child(conterOfFragment).child("NaturalConditions").getValue(String.class));
+                    mTime.setText("Время сбора: " + dataSnapshot.child("tasks").child(conterOfFragment).child("time").getValue(String.class));
+                    mDate.setText("Дата сбора: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Date").getValue(String.class));
                     stringCounter = dataSnapshot.child("volunter").child(user.getUid()).child("numberOfVolunter").getValue(String.class);
                     nowNumber = dataSnapshot.child("ratingOfVolonterAchivs").child(stringCounter).getValue(String.class);
             }

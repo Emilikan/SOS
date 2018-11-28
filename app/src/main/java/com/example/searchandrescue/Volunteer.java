@@ -141,10 +141,12 @@ public class Volunteer extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (counterFor == 1) {
                     dbCounter = dataSnapshot.child("numberOfPeople").getValue(String.class);
-                    Toast.makeText(getActivity(), dbCounter, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), dbCounter, Toast.LENGTH_SHORT).show();
                     int intCounter = Integer.parseInt(dbCounter);
                     intCounter++;
                     String stringCounter = Integer.toString(intCounter);
+
+                    String imagePath = "gs://forfindpeople.appspot.com/" + "volunteer/" + user.getUid(); // путь до обложки
                     // устанавливаем значение
                     mRef.child("Ids").child(stringCounter).setValue(user.getUid());
                     mRef.child("volunter").child(user.getUid()).child("full_name").setValue(full_name);
@@ -159,9 +161,15 @@ public class Volunteer extends Fragment {
                     mRef.child("ratingOfVolonterAchivs").child(stringCounter).setValue("0");
                     mRef.child("ratingOfVolonterNames").child(stringCounter).setValue(full_name);
                     mRef.child("volunter").child(user.getUid()).child("telephone").setValue(telephone);
-                    String imagePath = "gs://forfindpeople.appspot.com/" + "volunteer/" + user.getUid(); // путь до обложки
-                    mRef.child("volunter").child(user.getUid()).child("Photo").setValue(imagePath);
-                    uploadFile(imagePath, selectedImage);
+
+                    if(selectedImage != null) {
+                        uploadFile(imagePath, selectedImage);
+                        mRef.child("volunter").child(user.getUid()).child("Photo").setValue(imagePath);
+                    }
+                    else {
+                        mRef.child("volunter").child(user.getUid()).child("Photo").setValue("0");
+                    }
+
                     mRef.child("allVolunters").child(stringCounter).setValue(user.getUid()).toString();
                     counterFor = 0;
                     Toast.makeText(getActivity(), "Волонтер успешно создан", Toast.LENGTH_SHORT).show();

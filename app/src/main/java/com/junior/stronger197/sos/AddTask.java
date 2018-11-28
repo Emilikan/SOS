@@ -52,7 +52,7 @@ public class AddTask extends Fragment {
     private String mNaturalConditions;
     private String mTime;
     private String mDate;
-    private Uri selectedImage;
+    private Uri selectedImage = null;
     private ImageView img;
     private volatile String dbCounter = "";
 
@@ -129,10 +129,14 @@ public class AddTask extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(counterFor == 1) {
                     dbCounter = dataSnapshot.child("counter").getValue(String.class);
-                    Toast.makeText(getActivity(), dbCounter, Toast.LENGTH_SHORT).show();
+
+                    //Toast.makeText(getActivity(), dbCounter, Toast.LENGTH_SHORT).show();
+
                     int intCounter = Integer.parseInt(dbCounter);
                     intCounter++;
                     String stringCounter = Integer.toString(intCounter);
+
+                    String imagePath = "gs://forfindpeople.appspot.com/" + "images/" + mNameTask + "_" + stringCounter + "_img"; // путь до обложки
                     // устанавливаем значение
                     mRef.child("tasks").child(stringCounter).child("number").setValue(stringCounter);
                     mRef.child("tasks").child(stringCounter).child("nameOfTask").setValue(mNameTask);
@@ -142,15 +146,30 @@ public class AddTask extends Fragment {
                     mRef.child("tasks").child(stringCounter).child("Equipment").setValue(mEquipment);
                     mRef.child("tasks").child(stringCounter).child("NaturalConditions").setValue(mNaturalConditions);
                     mRef.child("tasks").child(stringCounter).child("time").setValue(mTime);
+                    mRef.child("tasks").child(stringCounter).child("Date").setValue(mDate);
                     mRef.child("tasks").child(stringCounter).child("Relevance").setValue(true);
                     mRef.child("tasks").child(stringCounter).child("someTask").child("0").setValue("Тестовая задача");
                     mRef.child("tasks").child(stringCounter).child("someTaskValue").setValue("-1");
 
-                    String imagePath = "gs://forfindpeople.appspot.com/" + "images/" + mNameTask + "_" + stringCounter + "_img"; // путь до обложки
-                    mRef.child("tasks").child(stringCounter).child("UriForPhoto").setValue(imagePath);
+                    if(selectedImage != null) {
+                        uploadFile(imagePath, selectedImage);
+                        mRef.child("tasks").child(stringCounter).child("UriForPhoto").setValue(imagePath);
+                    }
+                    else {
+                        mRef.child("tasks").child(stringCounter).child("UriForPhoto").setValue("0");
+                    }
                     mRef.child("counter").setValue(stringCounter);
-                    uploadFile(imagePath, selectedImage);
                     mRef.child("allTasks").child(stringCounter).setValue(mNameTask);
+
+                    ((EditText) getActivity().findViewById(R.id.nameTask)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.describingOfTask)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.coordinate1)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.coordinate2)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.equipment)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.naturalConditions)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.time)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.date)).setText("");
+                    selectedImage = null;
                     counterFor = 0;
                     Toast.makeText(getActivity(), "Задача успешно создана", Toast.LENGTH_SHORT).show();
                 }

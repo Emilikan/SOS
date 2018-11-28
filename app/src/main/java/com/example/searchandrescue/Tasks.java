@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.junior.stronger197.sos.AddTask;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Tasks extends Fragment {
 
@@ -51,7 +52,7 @@ public class Tasks extends Fragment {
                 counter = dataSnapshot.child("counter").getValue(String.class);
                 if("-1".equals(counter)){
                     Fragment fragment = new AddTask();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                     Toast.makeText(getActivity(), "Нет задач", Toast.LENGTH_SHORT).show();
                 }
@@ -104,7 +105,7 @@ public class Tasks extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Error cod" + databaseError.getCode(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Error cod" + databaseError.getCode(), Toast.LENGTH_SHORT).show();
             }
         });
     }

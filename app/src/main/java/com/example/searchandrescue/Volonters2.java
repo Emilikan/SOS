@@ -83,7 +83,7 @@ public class Volonters2 extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         v = dataSnapshot.child("Ids").child(number_volonter).getValue(String.class);
                         Fragment fragment = new Profile();
-                        FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+                        FragmentManager fragmentManager = Objects.requireNonNull(Objects.requireNonNull(getActivity()).getSupportFragmentManager());
                         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                         Bundle bundle = new Bundle();
                         String valueOfReplace = number_volonter;

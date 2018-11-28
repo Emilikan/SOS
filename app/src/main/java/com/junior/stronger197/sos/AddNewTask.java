@@ -119,6 +119,10 @@ public class AddNewTask extends Fragment {
                     mRef.child("tasks").child(conterOfFragment).child("someTask").child(stringCounter).setValue(mNameTask);
                     mRef.child("tasks").child(conterOfFragment).child("someTaskValue").setValue(stringCounter);
 
+                    ((EditText) getActivity().findViewById(R.id.nameTaskNewTask)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.describingOfTaskNewTask)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.timeNewTask)).setText("");
+                    ((EditText) getActivity().findViewById(R.id.coordinate1NewTask)).setText("");
                     counterFor = 0;
                     Toast.makeText(getActivity(), "Задача успешно создана", Toast.LENGTH_SHORT).show();
                 }

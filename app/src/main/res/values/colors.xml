@@ -5,4 +5,5 @@
     <color name="colorAccent">#27355e</color>
     <color name="bgStartColor">#5C7EE1</color>
     <color name="bgEndColor">#6B34D3</color>
+    <color name="transparent">#FF22EDCC</color>
 </resources>
