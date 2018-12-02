@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -35,11 +40,11 @@ public class Task extends Fragment {
     private TextView mNaturalConditions;
     private TextView mTime;
     private TextView mDate;
+    private ImageView mImage;
     public String conterOfFragment = "0";
 
     private String stringCounter;
-    private FirebaseAuth mAuth;
-    private FirebaseUser user = mAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String nowNumber;
 
 
@@ -51,7 +56,7 @@ public class Task extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_task, container, false);
 
@@ -61,6 +66,7 @@ public class Task extends Fragment {
             conterOfFragment = bundle.getString("Value", "0");
         }
 
+        mImage = (ImageView) rootView.findViewById(R.id.avatarFromCloud);
         mNameTask = (TextView) rootView.findViewById(R.id.nameFromDatabase);
         mDescrbingOfTask = (TextView) rootView.findViewById(R.id.descridingFromDatabase);
         mCoordiinate1 = (TextView) rootView.findViewById(R.id.coordinate1From);
@@ -70,15 +76,11 @@ public class Task extends Fragment {
         mTime = (TextView) rootView.findViewById(R.id.timeFrom);
         mDate = (TextView) rootView.findViewById(R.id.dateFrom);
 
-        Button pin = rootView.findViewById(R.id.cektedTask), base = rootView.findViewById(R.id.wentToBase), home = rootView.findViewById(R.id.returnToHome), chat = rootView.findViewById(R.id.chat);
-
-
         //Toast.makeText(getActivity(), conterOfFragment, Toast.LENGTH_SHORT).show();
         changeText();
 
         Button cektedReturnHome = (Button) rootView.findViewById(R.id.returnToHome); // кнопка о возвращении домой
         cektedReturnHome.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 int intCounter = Integer.parseInt(nowNumber);
@@ -119,7 +121,7 @@ public class Task extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new Blog();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                 Bundle bundle = new Bundle();
                 String valueOfReplace = conterOfFragment;
@@ -133,7 +135,7 @@ public class Task extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new Tasks();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
             }
         });
@@ -150,16 +152,31 @@ public class Task extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //dbCounter = dataSnapshot.child("counter").getValue(String.class);
                     //Toast.makeText(getActivity(), dbCounter, Toast.LENGTH_SHORT).show();
-                    mNameTask.setText(dataSnapshot.child("tasks").child(conterOfFragment).child("nameOfTask").getValue(String.class));
-                    mDescrbingOfTask.setText(dataSnapshot.child("tasks").child(conterOfFragment).child("describing").getValue(String.class));
-                    mCoordiinate1.setText("Координата 1: " +dataSnapshot.child("tasks").child(conterOfFragment).child("Coordinate1").getValue(String.class));
-                    mCoordinate2.setText("Координата 2: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Coordinate2").getValue(String.class));
-                    mEquipment.setText("Снаряжение: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Equipment").getValue(String.class));
-                    mNaturalConditions.setText("Природные условия: " + dataSnapshot.child("tasks").child(conterOfFragment).child("NaturalConditions").getValue(String.class));
-                    mTime.setText("Время сбора: " + dataSnapshot.child("tasks").child(conterOfFragment).child("time").getValue(String.class));
-                    mDate.setText("Дата сбора: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Date").getValue(String.class));
-                    stringCounter = dataSnapshot.child("volunter").child(user.getUid()).child("numberOfVolunter").getValue(String.class);
-                    nowNumber = dataSnapshot.child("ratingOfVolonterAchivs").child(stringCounter).getValue(String.class);
+                StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(Objects.requireNonNull(dataSnapshot.child("tasks").child(conterOfFragment).child("UriForPhoto").getValue(String.class)));
+
+                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.with(getContext()).load(uri).into(mImage);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast toast = Toast.makeText(getContext(), "Ошибка!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+
+                mNameTask.setText(dataSnapshot.child("tasks").child(conterOfFragment).child("nameOfTask").getValue(String.class));
+                mDescrbingOfTask.setText(dataSnapshot.child("tasks").child(conterOfFragment).child("describing").getValue(String.class));
+                mCoordiinate1.setText("Координата 1: " +dataSnapshot.child("tasks").child(conterOfFragment).child("Coordinate1").getValue(String.class));
+                mCoordinate2.setText("Координата 2: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Coordinate2").getValue(String.class));
+                mEquipment.setText("Снаряжение: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Equipment").getValue(String.class));
+                mNaturalConditions.setText("Природные условия: " + dataSnapshot.child("tasks").child(conterOfFragment).child("NaturalConditions").getValue(String.class));
+                mTime.setText("Время сбора: " + dataSnapshot.child("tasks").child(conterOfFragment).child("time").getValue(String.class));
+                mDate.setText("Дата сбора: " + dataSnapshot.child("tasks").child(conterOfFragment).child("Date").getValue(String.class));
+                stringCounter = dataSnapshot.child("volunter").child(user.getUid()).child("numberOfVolunter").getValue(String.class);
+                nowNumber = dataSnapshot.child("ratingOfVolonterAchivs").child(stringCounter).getValue(String.class);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

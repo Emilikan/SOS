@@ -20,7 +20,8 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
-            android:src="@drawable/ic_left_arrow" />
+            android:src="@drawable/ic_left_arrow"
+            />
 
         <ScrollView
             android:layout_width="match_parent"

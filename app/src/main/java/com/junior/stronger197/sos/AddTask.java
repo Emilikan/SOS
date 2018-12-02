@@ -120,11 +120,12 @@ public class AddTask extends Fragment {
         return rootView;
     }
 
-    private void saveDataToDatabase() throws InterruptedException {
+    private void saveDataToDatabase() {
 
         mRef = FirebaseDatabase.getInstance().getReference();
 
         mRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(counterFor == 1) {
@@ -172,6 +173,7 @@ public class AddTask extends Fragment {
                     selectedImage = null;
                     counterFor = 0;
                     Toast.makeText(getActivity(), "Задача успешно создана", Toast.LENGTH_SHORT).show();
+
                 }
             }
             @Override
@@ -179,6 +181,7 @@ public class AddTask extends Fragment {
                 Toast.makeText(getActivity(), "Error" + databaseError.getCode(), Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
